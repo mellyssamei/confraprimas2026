@@ -1,0 +1,508 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confra das Primas | Capinhas</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    background:#111;
+    color:#f5f5f5;
+    font-family:'DM Sans',sans-serif;
+    min-height:100vh;
+    padding:35px 18px;
+}
+
+.container { max-width:600px; margin:auto; }
+
+header { margin-bottom:35px; }
+
+.tag {
+    color:#b7a4e8;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:4px;
+    margin-bottom:15px;
+}
+
+h1 {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(40px,8vw,58px);
+    line-height:1.1;
+}
+
+h1 span { color:#b7a4e8; }
+
+.subtitle {
+    color:#888;
+    font-size:13px;
+    margin-top:12px;
+}
+
+.divider {
+    height:1px;
+    background:#303030;
+    margin:25px 0;
+}
+
+.card {
+    background:#1b1b1b;
+    border:1px solid #303030;
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:18px;
+}
+
+.label {
+    font-size:11px;
+    color:#b7a4e8;
+    letter-spacing:2px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+h2 { font-size:19px; margin-bottom:10px; }
+
+.description {
+    color:#999;
+    font-size:13px;
+    line-height:1.7;
+    margin-bottom:22px;
+}
+
+select {
+    width:100%;
+    padding:16px;
+    border-radius:10px;
+    border:1px solid #444;
+    background:#111;
+    color:white;
+    font-family:inherit;
+    font-size:14px;
+    outline:none;
+    margin-bottom:15px;
+}
+
+button {
+    width:100%;
+    padding:16px;
+    border:0;
+    border-radius:10px;
+    background:#b7a4e8;
+    color:#17131f;
+    font-family:inherit;
+    font-weight:800;
+    font-size:12px;
+    letter-spacing:1px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover {
+    background:#cbbcf2;
+    transform:translateY(-2px);
+}
+
+button:disabled {
+    opacity:.4;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.status {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:20px;
+}
+
+.status-item {
+    background:#111;
+    border:1px solid #303030;
+    padding:13px;
+    border-radius:10px;
+}
+
+.status-item strong {
+    display:block;
+    font-size:19px;
+    color:#c5b4ee;
+}
+
+.status-item span {
+    color:#888;
+    font-size:11px;
+}
+
+.participants {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+    margin-top:18px;
+}
+
+.person {
+    background:#111;
+    border:1px solid #303030;
+    padding:12px;
+    border-radius:9px;
+    font-size:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:5px;
+}
+
+.person.done { color:#888; }
+
+.person .check {
+    color:#b7a4e8;
+    font-weight:bold;
+}
+
+#result {
+    display:none;
+    text-align:center;
+}
+
+.result-box {
+    background:#111;
+    border:1px solid #51436e;
+    border-radius:12px;
+    padding:30px 15px;
+    margin:20px 0;
+}
+
+.result-box .small {
+    color:#888;
+    font-size:11px;
+    letter-spacing:2px;
+}
+
+.result-name {
+    font-family:'Playfair Display',serif;
+    font-size:40px;
+    color:#c5b4ee;
+    margin:15px 0;
+}
+
+.result-phone {
+    font-size:13px;
+    color:#aaa;
+}
+
+.note {
+    color:#888;
+    font-size:12px;
+    line-height:1.6;
+    margin-bottom:20px;
+}
+
+#finished {
+    display:none;
+    text-align:center;
+}
+
+#finished h2 {
+    color:#c5b4ee;
+    font-family:'Playfair Display',serif;
+    font-size:30px;
+    margin-bottom:15px;
+}
+
+.reset {
+    background:#292929;
+    color:#aaa;
+    border:1px solid #444;
+    margin-top:15px;
+}
+
+footer {
+    text-align:center;
+    color:#555;
+    font-size:10px;
+    letter-spacing:2px;
+    margin-top:35px;
+}
+
+@media(max-width:400px) {
+    .card { padding:19px; }
+    .participants { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <div class="tag">EDIÇÃO ESPECIAL • 2026</div>
+    <h1>CONFRA<br>DAS <span>PRIMAS.</span></h1>
+    <p class="subtitle">Sorteio de capinhas • Uma surpresa para cada prima.</p>
+    <div class="divider"></div>
+</header>
+
+<!-- TELA DE SELEÇÃO -->
+
+<div class="card" id="selection">
+
+    <div class="label">01 / IDENTIFICAÇÃO</div>
+    <h2>Quem está participando?</h2>
+
+    <p class="description">
+        Selecione seu nome na lista abaixo e descubra
+        qual prima você vai presentear.
+    </p>
+
+    <select id="personSelect">
+        <option value="">Selecione seu nome...</option>
+    </select>
+
+    <button id="drawButton" onclick="draw()">
+        FAZER MEU SORTEIO →
+    </button>
+
+    <div class="divider"></div>
+
+    <div class="label">ACOMPANHAMENTO</div>
+
+    <div class="status">
+        <div class="status-item">
+            <strong id="completedCount">0</strong>
+            <span>Sorteios realizados</span>
+        </div>
+        <div class="status-item">
+            <strong>6</strong>
+            <span>Total de participantes</span>
+        </div>
+    </div>
+
+    <div class="participants" id="participantStatus"></div>
+
+</div>
+
+<!-- RESULTADO INDIVIDUAL -->
+
+<div class="card" id="result">
+
+    <div class="label">SEU RESULTADO</div>
+
+    <h2>Você vai presentear...</h2>
+
+    <div class="result-box">
+        <div class="small">SUA PRIMA SORTEADA</div>
+        <div class="result-name" id="resultName"></div>
+        <div class="result-phone" id="resultPhone"></div>
+    </div>
+
+    <p class="note">
+        Guarde essa informação! Não conte para as outras primas
+        e mantenha o segredo até o dia da confra. 
+    </p>
+
+    <button onclick="backToSelection()">
+        FINALIZAR E PASSAR PARA A PRÓXIMA →
+    </button>
+
+</div>
+
+<!-- FINALIZAÇÃO -->
+
+<div class="card" id="finished">
+
+    <div class="label">SORTEIO FINALIZADO</div>
+
+    <h2>Todo mundo tem uma prima!</h2>
+
+    <p class="description">
+        Os seis sorteios foram realizados com sucesso.
+        Cada participante tem uma pessoa diferente para presentear.
+    </p>
+
+    <p style="color:#b7a4e8;font-size:13px;">
+        Agora é só preparar as capinhas! 
+    </p>
+
+</div>
+
+<footer>CONFRA DAS PRIMAS © 2026</footer>
+
+</div>
+
+<script>
+
+const participants = [
+    {name:"Bah", phone:"iPhone 17 Pro Max"},
+    {name:"Ana", phone:"iPhone 16"},
+    {name:"Mel", phone:"iPhone 17 Pro Max"},
+    {name:"Mica", phone:"iPhone 15 Pro Max"},
+    {name:"Yasmin", phone:"iPhone 14 Pro Max"},
+    {name:"Dessa", phone:"iPhone 17 Pro Max"}
+];
+
+const STORAGE_KEY = "confra_primas_capinhas_2026";
+
+let state = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+
+// Embaralha todos os nomes até criar uma distribuição
+// sem ninguém tirar a si mesma.
+function createDraws() {
+
+    let receivers;
+    let valid = false;
+
+    while(!valid) {
+
+        receivers = [...participants];
+
+        for(let i = receivers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+
+            [receivers[i], receivers[j]] =
+            [receivers[j], receivers[i]];
+        }
+
+        valid = receivers.every((person, i) =>
+            person.name !== participants[i].name
+        );
+    }
+
+    const assignments = {};
+
+    participants.forEach((person, i) => {
+        assignments[person.name] = receivers[i].name;
+    });
+
+    return {
+        assignments,
+        completed: []
+    };
+}
+
+function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function initialize() {
+
+    if(!state) {
+        state = createDraws();
+        save();
+    }
+
+    render();
+}
+
+function render() {
+
+    const select = document.getElementById("personSelect");
+
+    const previousValue = select.value;
+
+    select.innerHTML =
+        '<option value="">Selecione seu nome...</option>';
+
+    participants.forEach(person => {
+
+        const done = state.completed.includes(person.name);
+
+        const option = document.createElement("option");
+
+        option.value = person.name;
+        option.textContent = done
+            ? person.name + " — Já participou"
+            : person.name;
+
+        option.disabled = done;
+
+        select.appendChild(option);
+    });
+
+    select.value = state.completed.includes(previousValue)
+        ? ""
+        : previousValue;
+
+    document.getElementById("completedCount").textContent =
+        state.completed.length;
+
+    document.getElementById("participantStatus").innerHTML =
+        participants.map(person => {
+
+            const done = state.completed.includes(person.name);
+
+            return `
+                <div class="person ${done ? 'done' : ''}">
+                    <span>${person.name}</span>
+                    <span class="check">${done ? '✓' : '—'}</span>
+                </div>
+            `;
+        }).join("");
+
+    document.getElementById("drawButton").disabled =
+        state.completed.length === participants.length;
+}
+
+function draw() {
+
+    const selected = document.getElementById("personSelect").value;
+
+    if(!selected) {
+        alert("Selecione seu nome primeiro!");
+        return;
+    }
+
+    if(state.completed.includes(selected)) {
+        alert("Essa pessoa já realizou o sorteio!");
+        return;
+    }
+
+    const receiverName = state.assignments[selected];
+
+    const receiver = participants.find(p =>
+        p.name === receiverName
+    );
+
+    // Marca o sorteio como realizado antes de mostrar o resultado.
+    state.completed.push(selected);
+    save();
+
+    document.getElementById("resultName").textContent =
+        receiver.name;
+
+    document.getElementById("resultPhone").textContent =
+        receiver.phone;
+
+    document.getElementById("selection").style.display = "none";
+    document.getElementById("result").style.display = "block";
+
+    render();
+}
+
+function backToSelection() {
+
+    document.getElementById("result").style.display = "none";
+
+    if(state.completed.length === participants.length) {
+        document.getElementById("finished").style.display = "block";
+    } else {
+        document.getElementById("selection").style.display = "block";
+    }
+
+    document.getElementById("personSelect").value = "";
+    render();
+}
+
+// Inicia ou recupera o sorteio salvo.
+initialize();
+
+</script>
+
+</body>
+</html>
